@@ -1,18 +1,17 @@
-import { useRef, useState, useEffect, useContext } from 'react';
-import AuthContext from '../context/AuthProvider';
-import axios from '../api/axios';
+import { useRef, useState, useEffect, useContext } from "react";
+import AuthContext from "../context/AuthProvider";
+import axios from "../api/axios";
 
-const LOGIN_URL = '/auth';
+const LOGIN_URL = "/api/users/login";
 
 const Login = () => {
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth, isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const emailRef = useRef();
     const errRef = useRef();
 
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
 
     // focus email input on mount
     useEffect(() => {
@@ -26,23 +25,19 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.post(
                 LOGIN_URL,
-                JSON.stringify({ email, pwd }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
+                { email, password: pwd },
+                { withCredentials: true}
             );
 
-            const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
-            setAuth({ email, roles, accessToken }); // store auth info
+            const user = response?.data?.user;
+            setAuth({ email: user.email, name: user.name });
+            setIsLoggedIn(true);
+
             setEmail('');
             setPwd('');
-            setSuccess(true);
 
         } catch (err) {
             if (!err?.response) {
@@ -60,9 +55,10 @@ const Login = () => {
 
     return (
         <>
-            {success ? (
+            {isLoggedIn ? (
                 <section>
-                    <h1>You are logged in!</h1>
+                    <h1>Success!</h1>
+                    <p>You are logged in.</p>
                     <br />
                     <p>
                         <a href="/">Go to Home</a>

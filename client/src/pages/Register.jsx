@@ -1,42 +1,50 @@
 import { useRef, useState, useEffect } from "react";
-import axios from "../api/axios"; // updated path
+import axios from "../api/axios";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = '/register';
+const REGISTER_URL = "/api/users/register";
 
 const Register = () => {
     const emailRef = useRef();
     const errRef = useRef();
 
+    // Form state
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [validEmail, setValidEmail] = useState(false);
-    const [emailFocus, setEmailFocus] = useState(false);
-
     const [pwd, setPwd] = useState('');
-    const [validPwd, setValidPwd] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
-
     const [matchPwd, setMatchPwd] = useState('');
+
+    // Validation state
+    const [validEmail, setValidEmail] = useState(false);
+    const [validPwd, setValidPwd] = useState(false);
     const [validMatch, setValidMatch] = useState(false);
+
+    // Focus states
+    const [emailFocus, setEmailFocus] = useState(false);
+    const [pwdFocus, setPwdFocus] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
 
+    // Focus on email input on mount
     useEffect(() => {
         emailRef.current.focus();
     }, []);
 
+    // Validate email
     useEffect(() => {
         setValidEmail(EMAIL_REGEX.test(email));
     }, [email]);
 
+    // Validate password and match
     useEffect(() => {
         setValidPwd(PWD_REGEX.test(pwd));
         setValidMatch(pwd === matchPwd);
     }, [pwd, matchPwd]);
 
+    // Clear error messages on input change
     useEffect(() => {
         setErrMsg('');
     }, [email, pwd, matchPwd]);
@@ -52,17 +60,15 @@ const Register = () => {
         try {
             const response = await axios.post(
                 REGISTER_URL,
-                JSON.stringify({ email, pwd }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
+                { name, email, password: pwd },
+                { withCredentials: true }
             );
 
             console.log(response?.data);
             setSuccess(true);
 
             // clear form
+            setName('');
             setEmail('');
             setPwd('');
             setMatchPwd('');
@@ -92,6 +98,17 @@ const Register = () => {
                     </p>
                     <h1>Register</h1>
                     <form onSubmit={handleSubmit}>
+                        {/* Name */}
+                        <label htmlFor="name">Name:</label>
+                        <input
+                            type="text"
+                            id="name"
+                            autoComplete="off"
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                            required
+                        />
+
                         {/* Email */}
                         <label htmlFor="email">Email:</label>
                         <input

@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Register from './pages/Register'; // put your Register component in pages
-import Login from './pages/Login';       // optional, create later
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 function App() {
   return (
