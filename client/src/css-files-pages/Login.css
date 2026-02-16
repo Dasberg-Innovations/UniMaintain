@@ -1,0 +1,107 @@
+/* Layout & Global Styles */
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    min-height: 100vh;
+    background-color: #2a0909;
+    font-family: sans-serif;
+    color: white;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-box {
+    text-align: center; 
+    width: 100%;
+}
+
+/* Form Elements */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+input[type="email"], 
+input[type="password"] {
+    width: 100%;
+    padding: 12px 18px;
+    margin: 10px 0 18px 0;
+    display: inline-block;
+    border: none;
+    border-radius: 50px; 
+    box-sizing: border-box;
+    background-color: white;
+    font-size: 1rem;
+    color: #333;
+    text-align: center; 
+}
+
+button {
+    background-color: white; 
+    color: white;          
+    padding: 10px 30px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #eee; 
+    color: #000000;        
+}
+
+/* Feedback & Accessibility */
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+/* Signup Design */
+
+input[type="email"], 
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 12px 18px;
+    margin: 10px 0 18px 0;
+    display: inline-block;
+    border: none;
+    border-radius: 50px; 
+    box-sizing: border-box;
+    background-color: white;
+    font-size: 1rem;
+    color: #333;
+    text-align: center; 
+}
+
+.line a {
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
