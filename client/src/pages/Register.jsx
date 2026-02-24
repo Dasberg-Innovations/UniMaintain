@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom"
 import axios from "../api/axios";
 import "../css-files-pages/Login.css";
 import img from "../assets/UniMaintainLogo.png";
@@ -98,7 +99,7 @@ const Register = () => {
                 {success ? (
                     <section>
                         <h1>Success!</h1>
-                        <p><a href="/login" className="line">Sign In</a></p>
+                        <p><Link to="/login" className="line">Sign In</Link></p>
                     </section>
                 ) : (
                     <>
@@ -175,7 +176,7 @@ const Register = () => {
                         </form>
                         <p>
                             Already registered?<br />
-                            <span className="line"><a href="/login">Sign In</a></span>
+                            <span className="line"><Link to="/login">Sign In</Link></span>
                         </p>
                     </>
                 )}

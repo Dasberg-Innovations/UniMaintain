@@ -1,5 +1,7 @@
-import { useRef, useState, useEffect, useContext } from "react";
-import AuthContext from "../context/AuthProvider";
+import { useRef, useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
+import { Link, useNavigate, useLocation } from "react-router-dom"
+
 import axios from "../api/axios";
 import "../css-files-pages/Login.css";
 import img from "../assets/UniMaintainLogo.png";
@@ -7,7 +9,10 @@ import img from "../assets/UniMaintainLogo.png";
 const LOGIN_URL = "/api/users/login";
 
 const Login = () => {
-    const { setAuth, isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    const { setAuth, isLoggedIn, setIsLoggedIn } = useAuth();
+
+    const navigate = useNavigate();
+
     const emailRef = useRef();
     const errRef = useRef();
 
@@ -35,11 +40,27 @@ const Login = () => {
             );
 
             const user = response?.data?.user;
-            setAuth({ email: user.email, name: user.name });
+            const accessToken = response?.data.accessToken;
+            
+            setAuth({ 
+                email: user.email, 
+                name: user.name , 
+                role: user.role, 
+                accessToken
+            });
+            
             setIsLoggedIn(true);
 
             setEmail('');
             setPwd('');
+
+            if (user.role === "admin") {
+                navigate("/admin", { replace: true });
+            } else if (user.role === "maintenance") {
+                navigate("/maintenance", { replace: true });
+            } else {
+                navigate("/user", { replace: true });
+            }
 
         } catch (err) {
             if (!err?.response) {
@@ -47,7 +68,7 @@ const Login = () => {
             } else if (err.response?.status === 400) {
                 setErrMsg('Missing Email or Password');
             } else if (err.response?.status === 401) {
-                setErrMsg('Unauthorized');
+                setErrMsg(err.response.data.message || 'Invalid email or password');
             } else {
                 setErrMsg('Login Failed');
             }
@@ -56,64 +77,52 @@ const Login = () => {
     };
 
     return (
-        <>
-            {isLoggedIn ? (
-                <section>
-                    <h1>Success!</h1>
-                    <p>You are logged in.</p>
-                    <br />
-                    <p>
-                        <a href="/">Go to Home</a>
-                    </p>
-                </section>
-            ) : (
-                <div className="login-container">
-                    <div className="login-box">
-                        <img
-                            src={img}
-                            alt="UniMaintain Logo"
-                            style={{ width: "190px", height: "auto", display: "block", margin: "0 auto 15px" }}
-                        />
-                        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-                            {errMsg}
-                        </p>
-                        <h1>Sign In</h1>
-                        <form onSubmit={handleSubmit}>
-                            {/* Email */}
-                            <label htmlFor="email">Email:</label>
-                            <input
-                                type="email"
-                                id="email"
-                                ref={emailRef}
-                                autoComplete="off"
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
-                                required
-                            />
 
-                            {/* Password */}
-                            <label htmlFor="password">Password:</label>
-                            <input
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPwd(e.target.value)}
-                                value={pwd}
-                                required
-                            />
+        <div className="login-container">
+            <div className="login-box">
+                <img
+                    src={img}
+                    alt="UniMaintain Logo"
+                    style={{ width: "190px", height: "auto", display: "block", margin: "0 auto 15px" }}
+                />
+                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+                    {errMsg}
+                </p>
+                <h1>Sign In</h1>
+                <form onSubmit={handleSubmit}>
+                    {/* Email */}
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        ref={emailRef}
+                        autoComplete="off"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                        required
+                    />
 
-                            <button>Sign In</button>
-                        </form>
+                    {/* Password */}
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        onChange={(e) => setPwd(e.target.value)}
+                        value={pwd}
+                        required
+                    />
 
-                        <p>
-                            Need an Account?<br />
-                            <span className="line">
-                                <a href="/register">Sign Up</a>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-            )}
-        </>
+                    <button>Sign In</button>
+                </form>
+
+                <p>
+                    Need an Account?<br />
+                    <span className="line">
+                        <Link to="/register">Sign Up</Link>
+                    </span>
+                </p>
+            </div>
+        </div>
     );
 };
 
