@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Admin from './pages/AdminDashboard';
 import User from './pages/UserDashboard';
 import Maintenance from './pages/MaintenanceDashboard';
+import ReportForm from './pages/ReportForm';
 import Unauthorized from './pages/Unauthorized';
 import RequireAuth from './components/RequireAuth';
 import Layout from "./components/Layout";
@@ -19,6 +20,7 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />
         <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="reportform" element={<ReportForm />} />
 
         {/* Protected Routes*/}
         <Route element={<RequireAuth allowedRoles={["user"]} />}>
