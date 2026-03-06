@@ -1,5 +1,5 @@
 import useAuth from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const UserDashboard  = () => {
 
@@ -14,6 +14,9 @@ const UserDashboard  = () => {
     return (
         <div>
             <h1>User Dashboard Page</h1>
+            <Link to="/reportform">
+                <button>Submit New Report</button>
+            </Link>
             <button onClick={handleLogout}>Logout</button>
         </div>
         

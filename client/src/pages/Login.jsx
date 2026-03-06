@@ -50,6 +50,7 @@ const Login = () => {
             });
             
             setIsLoggedIn(true);
+            localStorage.setItem("token", response.data.accessToken);
 
             setEmail('');
             setPwd('');
