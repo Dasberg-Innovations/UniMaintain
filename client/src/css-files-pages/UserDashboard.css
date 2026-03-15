@@ -8,68 +8,6 @@
   overflow: hidden;
 }
 
-.sidebar {
-  width: 240px;
-  background-color: #2b0909;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar-heading1 {
-  padding: 30px 30px;
-  text-align: center;
-}
-
-.uni-maintain-logo {
-  width: 180px;
-  height: auto;
-  margin-bottom: 12px;
-}
-
-.sidebar-brand {
-  color: #ba9a6e; 
-  letter-spacing: 3px;
-  font-size: 14px;
-  text-transform: uppercase;
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.sidebar-menu {
-  padding: 18px 30px;
-  font-size: 15px;
-  color: #e0e0e0;
-  text-decoration: none;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 18px 30px;
-  gap: 15px; 
-  transition: 0.2s;
-}
-
-.sidebar-menu.active {
-  background-color: rgba(255, 255, 255, 0.2); 
-  color: white;
-  border-right: 4px solid #ba9a6e;
-}
-
-.sidebar-menu:hover:not(.active) {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.nav-link.active .nav-icon,
-.sidebar-menu:hover .nav-icon {
-  opacity: 1;
-  color: #ffffff; 
-}
-
 .user-dashboard {
   flex: 1;
   padding: 40px;
@@ -87,7 +25,7 @@
 .dashboard-heading h1 {
   font-weight: 300;
   margin-bottom: 5px;
-  color:grey
+  color: grey;
 }
 
 .dashboard-heading h2 {
@@ -135,5 +73,3 @@
   font-size: 1.5rem;
   font-weight: bold;
 }
-
-
