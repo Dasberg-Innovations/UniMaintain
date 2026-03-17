@@ -1,7 +1,8 @@
 import React from "react";
-import img from "../assets/UniMaintainLogo.png";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../components/sidebarcomponent";
+import "../css-files-pages/userDashboard.css";
 
 const UserDashboard = () => {
   const { logout } = useAuth();
@@ -12,15 +13,19 @@ const UserDashboard = () => {
     navigate("/login", { replace: true });
   };
 
-    return (
-        <div>
-            <h1>User Dashboard Page</h1>
-            <button onClick={handleLogout}>Logout</button>
+  return (
+    <div className="dashboard">
+      <Sidebar handleLogout={handleLogout} role="user" activePage="dashboard" />
+
+      <main className="user-dashboard">
+        <div className="dashboard-heading">
+          <h1>Hello User,</h1>
+          <h2>Welcome to your Dashboard</h2>
+          <p className="dashboard-name">Report Dashboard</p>
         </div>
 
         <div className="report">
           <div className="report-item">
-
             <p className="report-label">Active Reports</p>
             <span className="active-data-report">0</span>
           </div>

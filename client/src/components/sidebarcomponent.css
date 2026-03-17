@@ -1,0 +1,59 @@
+.sidebar {
+  width: 240px;
+  background-color: #2b0909;
+  height: 100vh;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-heading1 {
+  padding: 30px 30px;
+  text-align: center;
+}
+
+.uni-maintain-logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sidebar-menu {
+  padding: 18px 30px;
+  font-size: 15px;
+  color: #e0e0e0;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 15px; 
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar-menu.active {
+  background-color: rgba(255, 255, 255, 0.2); 
+  color: white;
+  border-right: 4px solid #ba9a6e;
+}
+
+.sidebar-menu:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.nav-icon {
+  width: 20px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.sidebar-menu:hover .nav-icon,
+.sidebar-menu.active .nav-icon {
+  opacity: 1;
+}
