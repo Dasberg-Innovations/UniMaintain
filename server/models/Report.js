@@ -22,7 +22,8 @@ const reportSchema = new mongoose.Schema({
     default: "Submitted"
   },
   createdBy: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true
   },
   phone: { type: String, required: true },

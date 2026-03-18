@@ -14,7 +14,7 @@ const createReport = async (req, res) => {
       category,
       priority,
       phone,
-      createdBy: req.user.email
+      createdBy: req.user.id
     });
 
     await newReport.save();
@@ -29,4 +29,22 @@ const createReport = async (req, res) => {
   }
 };
 
-module.exports = { createReport };
+const getReports = async (req, res) => {
+  try {
+    let reports;
+
+    if (req.user.role === "admin"){
+      // Allows admin to see all reports
+      reports = await Report.find().populate("createdBy", "name email");
+    } else {
+      // Allows regular users to see their submitted reports
+      reports = await Report.find({createdBy: req.user.id}).populate("createdBy", "name email");
+    }
+    
+    res.json(reports);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching reports" });
+  }
+};
+
+module.exports = { createReport , getReports};

@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const { 
-    createReport 
+    createReport,
+    getReports 
 } = require("../controllers/reportController");
 const verifyJWT = require("../middleware/verifyJWT");
 
-router.post("/reports", verifyJWT, createReport);
+router.post("/", verifyJWT, createReport);
+router.get("/", verifyJWT, getReports);
 
 module.exports = router;
