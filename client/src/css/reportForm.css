@@ -1,0 +1,110 @@
+.report-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #ffffff;
+  color: black;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+/* Sidebar same width as dashboard */
+.sidebar {
+  width: 240px;
+}
+
+/* Main content area next to sidebar */
+.report-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: flex-start; 
+  overflow-y: auto;
+}
+
+/* Form box/card */
+.report-form-box {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Form headings */
+.report-form-box h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Labels and inputs */
+.report-form-box label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.report-form-box input,
+.report-form-box select,
+.report-form-box textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.report-form-box textarea {
+  resize: vertical;
+}
+
+/* Submit button */
+.report-form-box button {
+  width: 100%;
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.report-form-box button:hover {
+  background-color: #0056b3;
+}
+
+/* Error message styling */
+.errmsg {
+  color: #d93025;
+  margin-bottom: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Success message */
+.report-success {
+  text-align: center;
+  background-color: #e6ffed;
+  border: 1px solid #b7eb8f;
+  padding: 30px 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.report-success h1 {
+  color: #389e0d;
+}
+
+.report-success p {
+  margin-top: 10px;
+}

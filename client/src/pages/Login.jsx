@@ -1,9 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
-import { Link, useNavigate, useLocation } from "react-router-dom"
-
+import { Link, useNavigate } from "react-router-dom"
 import axios from "../api/axios";
-import "../css-files-pages/Login.css";
+import "../css/Login.css";
 import img from "../assets/UniMaintainLogo.png";
 
 const LOGIN_URL = "/api/users/login";
@@ -50,18 +49,20 @@ const Login = () => {
             });
             
             setIsLoggedIn(true);
-            localStorage.setItem("token", response.data.accessToken);
+            localStorage.setItem(
+                "auth",
+                JSON.stringify({
+                    email: user.email,
+                    name: user.name,
+                    role: user.role,
+                    accessToken
+                })
+            );
 
             setEmail('');
             setPwd('');
 
-            if (user.role === "admin") {
-                navigate("/admin", { replace: true });
-            } else if (user.role === "maintenance") {
-                navigate("/maintenance", { replace: true });
-            } else {
-                navigate("/user", { replace: true });
-            }
+            navigate("/dashboard", { replace: true });
 
         } catch (err) {
             if (!err?.response) {

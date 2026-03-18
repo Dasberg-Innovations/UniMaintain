@@ -1,10 +1,16 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
+import Sidebar from "../components/Sidebar";
+import useAuth from "../hooks/useAuth";
+import "../css/reportForm.css";
+import "../css/Dashboard.css";
 
 const REPORT_URL = "/api/reports";
 
 const ReportForm = () => {
+
+    const { auth, logout } = useAuth();
 
     const errRef = useRef();
 
@@ -77,7 +83,7 @@ const ReportForm = () => {
                 },
                 {
                     headers: { 
-                        Authorization: `Bearer ${localStorage.getItem("token")}` 
+                        Authorization: `Bearer ${auth?.accessToken}` 
                     }
                 }
             );
@@ -114,15 +120,16 @@ const ReportForm = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-box">
+        <div className="report-container">
+          <Sidebar role={auth?.role} activePage="create" />
 
+            <div className="report-content">
                 {success ? (
-                    <section>
+                    <section className="report-success">
                         <h1>Report Submitted!</h1>
                         <p>Your maintenance request has been logged.</p>
                         <p>
-                            <Link to="/user" className="line">
+                            <Link to="/dashboard" className="line">
                                 Return to Dashboard
                             </Link>
                         </p>
@@ -130,7 +137,7 @@ const ReportForm = () => {
 
                 ) : (
 
-                    <>
+                    <div className="report-form-box">
                         <p
                             ref={errRef}
                             className={errMsg ? "errmsg" : "offscreen"}
@@ -251,7 +258,7 @@ const ReportForm = () => {
                             </button>
 
                         </form>
-                    </>
+                    </div>
                 )}
             </div>
         </div>

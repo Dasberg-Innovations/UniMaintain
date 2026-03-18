@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 import axios from "../api/axios";
-import "../css-files-pages/Login.css";
+import "../css/Login.css";
 import img from "../assets/UniMaintainLogo.png";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
