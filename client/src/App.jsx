@@ -8,7 +8,7 @@ import RequireAuth from './components/RequireAuth';
 import Layout from "./components/Layout";
 import Dashboard from "./components/Dashboard";
 import ReportList from "./pages/ReportList";
-import ReportDetails from "./pages/ReportDetails";
+import ReportDetailsUser from "./pages/ReportDetails";
 
 function App() {
   const { auth } = useAuth() || {};
@@ -25,7 +25,7 @@ function App() {
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="reportform" element={<ReportForm />} />
         <Route path="reportlist" element={<ReportList />} />
-        <Route path="reports/:id" element={<ReportDetails />} />
+        <Route path="reports/:id" element={<ReportDetailsUser />} />
 
         {/* Protected Routes */}
         <Route element={<RequireAuth allowedRoles={["user", "admin", "maintenance"]} />}>
