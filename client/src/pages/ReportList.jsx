@@ -64,7 +64,7 @@ const { auth } = useAuth();
   return (
     <div className="report-list-container">
 
-      <Sidebar/>
+      <Sidebar role={auth?.role} activePage="reportlist"/>
 
       <div className="report-list">
         <h2>Reports</h2>

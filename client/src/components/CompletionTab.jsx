@@ -22,7 +22,7 @@ const CompletionTab = ({ report, role }) => {
 
                 <div className="right-column">
                     <label>Completed By</label>
-                    <textarea readOnly value={report.completedBy?.join(", ") || ""}></textarea>
+                    <textarea readOnly value={report.completedBy?.map(user => user.name).join(", ") || ""}></textarea>
 
                     <label>Completion Hours</label>
                     <input type="number" readOnly value={report.completionHours || ""} />

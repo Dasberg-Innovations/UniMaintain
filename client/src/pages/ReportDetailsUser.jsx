@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 import Sidebar from "../components/Sidebar";
 import "../css/reportDetails.css";
-import axios from "axios";
+import axios from "../api/axios";
 import ReportSummary from "../components/ReportSummary";
-import ReportedBy from "../components/ReportedBy";
+import ReportNav from "../components/ReportNav";
 import GeneralTab from "../components/GeneralTab";
 
 
@@ -15,12 +16,14 @@ const ReportDetailsUser = () => {
     const [loading, setLoading] = useState(!report);
     const [error, setError] = useState(null);
 
+    const { auth } = useAuth();
+
     useEffect(() => {
 
         if (!report) {
-            const fetchReport = async () => {
+            const getReport = async () => {
                 try {
-                    const res = await axios.get(`/api/reports/${id}`);
+                    const res = await axios.get(`/api/reportuser/${id}`);
                     setReport(res.data);
                 } catch (err) {
                     console.error(err);
@@ -29,7 +32,7 @@ const ReportDetailsUser = () => {
                     setLoading(false);
                 }
             };
-            fetchReport();
+            getReport();
         } else {
             setLoading(false);
         }
@@ -41,15 +44,14 @@ const ReportDetailsUser = () => {
 
     return (
         <div className="report-details-user-page">
-            <Sidebar />
+            <Sidebar role={auth?.role} activePage="reportuser" />
 
             <div className="report-details-content">
+                <ReportNav role={auth?.role}/>
                 {/*  Summary  */}
-                <ReportSummary report={report} role="user" />
+                <ReportSummary report={report} role={auth?.role} />
                 
-                <ReportedBy report={report} />
-                
-                <GeneralTab report={report} role="user"/>
+                <GeneralTab report={report} role={auth?.role}/>
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 import React from "react";
 import ReportedBy from "./ReportedBy";
 
-const GeneralTab = ({ report, role }) => {
+const GeneralTab = ({ report, role, users }) => {
     const isUser = role === "user";
     const isAdminOrMaintenance = role !== "user";
 
@@ -26,7 +26,13 @@ const GeneralTab = ({ report, role }) => {
 
                     <div className="right-column">
                         <label>Assignment</label>
-                        <textarea readOnly value={report.assignment || ""}></textarea>
+                        <select multiple>
+                            {users.map(user => (
+                                <option key={user._id} value={user._id}>
+                                    {user.name}
+                                </option>
+                            ))}
+                        </select>
 
                         <label>Estimated Hours</label>
                         <input type="number" readOnly value={report.estimatedHours || ""} />

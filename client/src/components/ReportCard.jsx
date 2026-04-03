@@ -1,13 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 export default function ReportCard({ report }) {
 
   const navigate = useNavigate();
 
+  const { auth } = useAuth();
+
   const handleClick = () => {
-        navigate(`/reports/${report._id}`, { state: { report } });
-    };
+    if (auth?.role === "admin" || auth?.role === "maintenance") {
+      navigate(`/reportstaff/${report._id}`, { state: { report } });
+    } else {
+      navigate(`/reportuser/${report._id}`, { state: { report } });
+    }
+  };
 
   return (
     <tr onClick={handleClick} style={{ cursor: "pointer" }} className="report-card-row">
