@@ -1,5 +1,6 @@
 .report-details-user-page{
     width: 100vw;
+    height: 100vh;
     background-color: #ffffff;
     color: black;
     font-family: sans-serif;
@@ -15,8 +16,6 @@
     display: flex; /* Subject to Change */
     flex-direction: column; /* Subject to Change */
     gap: 30px; /* Subject to Change */
-    max-width: 900px; /* Subject to Change */
-    margin-left: 250px; /* Subject to Change */
 }
 
 .two-column {

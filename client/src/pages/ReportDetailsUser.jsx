@@ -49,9 +49,9 @@ const ReportDetailsUser = () => {
             <div className="report-details-content">
                 <ReportNav role={auth?.role}/>
                 {/*  Summary  */}
-                <ReportSummary report={report} role={auth?.role} />
+                <ReportSummary editedReport={report} role={auth?.role} />
                 
-                <GeneralTab report={report} role={auth?.role}/>
+                <GeneralTab editedReport={report} role={auth?.role}/>
             </div>
         </div>
     );

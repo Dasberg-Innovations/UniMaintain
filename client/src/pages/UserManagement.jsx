@@ -4,6 +4,8 @@ import Sidebar from "../components/Sidebar";
 import SearchFilter from "../components/SearchFilter";
 import useAuth from "../hooks/useAuth";
 import "../css/UserManagement.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const USER_URL = "/api/users";
 
@@ -174,7 +176,7 @@ const UserManagement = () => {
                     </td>
 
                     <td>
-                      <button onClick={() => handleDelete(user._id)}>Delete</button>
+                      <button onClick={() => handleDelete(user._id)}> <FontAwesomeIcon icon={faTrash} /></button>
                     </td>
                   </tr>
                 ))}

@@ -66,19 +66,19 @@ const Dashboard = ({ role, username }) => {
       case "maintenance":
         return (
           <div className="report">
-            <div className="report-item" onClick={() => navigate("/reports?filter=pending")}>
+            <div className="report-item" onClick={() => navigate("/reportlist?filter=pending")}>
               <p className="report-label">Pending Reports</p>
               <span className="report-count">{pendingReports.length}</span>
             </div>
-            <div className="report-item" onClick={() => navigate("/reports?filter=outstanding")}>
+            <div className="report-item" onClick={() => navigate("/reportlist?filter=outstanding")}>
               <p className="report-label">Outstanding Reports</p>
               <span className="report-count">{outstandingReports.length}</span>
             </div>
-            <div className="report-item" onClick={() => navigate("/reports?filter=resolved")}>
+            <div className="report-item" onClick={() => navigate("/reportlist?filter=resolved")}>
               <p className="report-label">Resolved Reports</p>
               <span className="report-count">{resolvedReports.length}</span>
             </div>
-            <div className="report-item" onClick={() => navigate("/reports")}>
+            <div className="report-item" onClick={() => navigate("/reportlist")}>
               <p className="report-label">Report Log</p>
               <span className="report-count">{reportLog}</span>
             </div>

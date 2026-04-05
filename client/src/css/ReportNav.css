@@ -1,0 +1,39 @@
+/* ReportNav.css - basic horizontal layout */
+.report-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+.report-nav button {
+  margin: 0 4px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+}
+
+.nav-left button {
+  font-weight: bold;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.actions-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.actions-dropdown:hover .dropdown-menu {
+  display: block;
+}

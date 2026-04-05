@@ -56,7 +56,7 @@ const reportSchema = new mongoose.Schema({
     default: "" 
   },
 
-  assignment: [{
+  assignedTo: [{
   type: mongoose.Schema.Types.ObjectId,
   ref: "User"
   }],

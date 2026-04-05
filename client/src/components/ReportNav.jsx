@@ -1,12 +1,13 @@
 import React from "react";
+import "../css/ReportNav.css";
 
 const ReportNav = ({
   role = "user",
   onBack,
+  onSave,
   onPrint,
   onNext,
   onPrev,
-  onSave,
   onDelete
 }) => {
 
