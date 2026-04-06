@@ -39,7 +39,7 @@ const { auth } = useAuth();
     );
   } else if (filter === "outstanding") {
     filteredReports = reports.filter(r =>
-      r.status === ["Assigned", "In Progress"].includes(r.status)
+      ["Assigned", "In Progress"].includes(r.status)
     );
   }
 
@@ -68,7 +68,15 @@ const { auth } = useAuth();
 
       <div className="report-list">
         <h2>Reports</h2>
-
+        <div className="search-container">
+          <div className="search-input-wrapper">
+            <input 
+              type="text" 
+              placeholder="Search reports by title, category, or status" 
+              className="search-bar"
+            />
+          </div>
+        </div>
         <div className="report-table">
           <table>
             <thead>

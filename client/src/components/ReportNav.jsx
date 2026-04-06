@@ -1,6 +1,6 @@
 import React from "react";
 import "../css/ReportNav.css";
-
+import { useNavigate } from "react-router-dom";
 const ReportNav = ({
   role = "user",
   onBack,
@@ -10,16 +10,24 @@ const ReportNav = ({
   onPrev,
   onDelete
 }) => {
-
+  const navigate = useNavigate();
   const isAdmin = role === "admin";
   const isMaintenance = role === "maintenance";
+
+  const handleGoBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      navigate(-1);
+    }
+  };
 
   return (
     <div className="report-nav">
 
       {/* LEFT SIDE */}
       <div className="nav-left">
-        <button onClick={onBack}>← Back</button>
+        <button onClick={handleGoBack}>← Back</button>
       </div>
 
       {/* RIGHT SIDE */}

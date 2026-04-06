@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import Sidebar from "./Sidebar";
@@ -9,18 +9,41 @@ import "../css/Dashboard.css";
 const Dashboard = ({ role, username }) => {
   
   const REPORT_URL = "/api/reports";
-
   const { auth } = useAuth();
-
   const [reports, setReports] = useState([]);
-
   const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    if (auth?.accessToken) {
-      getReports();
+  const getReports = async () => {
+    if (!auth?.accessToken) return;
+    
+    try {
+      const response = await axios.get(REPORT_URL, {
+        headers: {
+          Authorization: `Bearer ${auth?.accessToken}`
+        }
+      });
+      setReports(Array.isArray(response.data) ? response.data : []);
+    } catch (err) {
+      console.error("Error fetching reports:", err);
+      setReports([]);
     }
+  };
+
+  // Initial load and when auth changes
+  useEffect(() => {
+    getReports();
   }, [auth]);
+
+  // Refresh when returning from report creation/editing
+  useEffect(() => {
+    // Check if we came back from creating/editing a report
+    if (location.state?.refresh) {
+      getReports();
+      // Clear the state to prevent repeated refreshes
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location]);
 
   // USER / ADMIN LOGIC
   const activeReports = reports.filter(r =>
@@ -35,7 +58,7 @@ const Dashboard = ({ role, username }) => {
     r.status === "Closed"
   );
 
-  // MAINTENANCE LOGIC (your naming)
+  // MAINTENANCE LOGIC
   const pendingReports = reports.filter(r =>
     r.status === "Submitted"
   );
@@ -44,22 +67,7 @@ const Dashboard = ({ role, username }) => {
     ["Assigned", "In Progress"].includes(r.status)
   );
 
-  // LOGS
   const reportLog = reports.length;
-
-  const getReports = async () => {
-    try {
-      const response = await axios.get(REPORT_URL, {
-        headers: {
-          Authorization: `Bearer ${auth?.accessToken}`
-        }
-      });
-
-      setReports(Array.isArray(response.data) ? response.data : []);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const renderReports = () => {
     switch (role) {
@@ -131,13 +139,18 @@ const Dashboard = ({ role, username }) => {
     <div className="dashboard">
       <Sidebar role={role} activePage="dashboard" />
       <main className="dashboard-main">
-        <div className="dashboard-heading">
-          <h1>Hello {username},</h1>
-          <h2>Welcome to your Dashboard</h2>
-          <p className="dashboard-name">{role.charAt(0).toUpperCase() + role.slice(1)} Dashboard</p>
+        <div className="dashboard-container">
+          <div className="dashboard-heading">
+            <h1>Hello {username},</h1>
+            <h2>Welcome to your Dashboard</h2>
+            <p className="dashboard-name">
+              {role.charAt(0).toUpperCase() + role.slice(1)} Dashboard
+            </p>
+          </div>
+          <div className="report-section">
+            {renderReports()}
+          </div>
         </div>
-
-        {renderReports()}
       </main>
     </div>
   );
