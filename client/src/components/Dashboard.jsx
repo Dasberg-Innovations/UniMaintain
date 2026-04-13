@@ -1,19 +1,22 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import Sidebar from "./Sidebar";
 import "../css/Dashboard.css";
 
 const Dashboard = ({ role, username }) => {
-  
+  // API endpoint for fetching reports
   const REPORT_URL = "/api/reports";
+  // access current auth state
   const { auth } = useAuth();
+  // store fetched reports
   const [reports, setReports] = useState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate();   // for navigation
+  const location = useLocation();   // to detect state from previous navigation
 
+  // fetch all reports from backend
   const getReports = async () => {
     if (!auth?.accessToken) return;
     
@@ -23,7 +26,7 @@ const Dashboard = ({ role, username }) => {
           Authorization: `Bearer ${auth?.accessToken}`
         }
       });
-      setReports(Array.isArray(response.data) ? response.data : []);
+      setReports(Array.isArray(response.data) ? response.data : []);  // ensure array
     } catch (err) {
       console.error("Error fetching reports:", err);
       setReports([]);
@@ -67,8 +70,9 @@ const Dashboard = ({ role, username }) => {
     ["Assigned", "In Progress"].includes(r.status)
   );
 
-  const reportLog = reports.length;
+  const reportLog = reports.length; // total reports
 
+  // render dashboard report cards based on role
   const renderReports = () => {
     switch (role) {
       case "maintenance":

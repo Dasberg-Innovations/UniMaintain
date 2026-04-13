@@ -14,35 +14,44 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 const ReportDetailsStaff = () => {
-    const { id } = useParams(); 
-    const location = useLocation(); 
+    const { id } = useParams();     // get report ID from URL
+    const location = useLocation(); // access navigation state
 
     const { auth } = useAuth();
+
+    // restrict access to admin and maintenance roles
     if (auth?.role !== "admin" && auth?.role !== "maintenance") {
         return <p>Access denied.</p>;
     }
 
+    // report state (use passed state first, fallback to fetch)
     const [report, setReport] = useState(location.state?.report || null);
     const [loading, setLoading] = useState(!report);
     const [error, setError] = useState(null);
 
+    // user list for assignment
     const [users, setUsers] = useState([]);
     const [loadingUsers, setLoadingUsers] = useState(true);
 
+    // filter only maintenance users
     const maintenanceUsers = users.filter(
         user => user.role === "maintenance"
     );
   
+    // editable version of report
     const [editedReport, setEditedReport] = useState(report);
     
+    // tab state
     const [value, setValue] = useState(0);
 
+    // handle tab change
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // for navigation
 
+    // save updated report to backend
     const handleSave = async () => {
         try {
             await axios.put(`/api/reports/${report._id}`, editedReport, {
@@ -58,20 +67,24 @@ const ReportDetailsStaff = () => {
         }
     };
 
+    // navigate back to report list
     const handleBack = () => {
         navigate("/reportlist", { replace: true });
     };
 
+    // redirect if not authenticated
     if (!auth?.accessToken) {
         return <Navigate to="/login" replace />;
     }
 
+    // sync edited report when report data changes
     useEffect(() => {
         if (report) {
             setEditedReport(report);
         }
     }, [report]);
         
+    // fetch report if not passed via navigation state
     useEffect(() => {
         if (!report) {
             const getReport = async () => {
@@ -95,6 +108,7 @@ const ReportDetailsStaff = () => {
         }
     }, [id, auth]);
 
+    // fetch users for assignment dropdowns
     useEffect(() => {
         const getUsers = async () => {
             try {
@@ -134,6 +148,7 @@ const ReportDetailsStaff = () => {
                     </Tabs>
 
                     <Box sx={{ padding: 2 }}>
+                        {/* General tab */}
                         {value === 0 && 
                             <GeneralTab 
                                 editedReport={editedReport} 
@@ -142,6 +157,7 @@ const ReportDetailsStaff = () => {
                                 users={maintenanceUsers} 
                             />
                         }
+                        {/* Completion tab */}
                         {value === 1 && 
                             <CompletionTab 
                                 editedReport={editedReport} 

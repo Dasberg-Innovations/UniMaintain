@@ -10,14 +10,21 @@ import GeneralTab from "../components/GeneralTab";
 
 
 const ReportDetailsUser = () => {
+
+    // get report ID from URL
     const { id } = useParams(); 
+    // access navigation state
     const location = useLocation(); 
+
+    // report state (use passed state first, fallback to fetch)
     const [report, setReport] = useState(location.state?.report || null);
     const [loading, setLoading] = useState(!report);
     const [error, setError] = useState(null);
 
+    // access user role
     const { auth } = useAuth();
 
+    // fetch report if not passed via navigation state
     useEffect(() => {
 
         if (!report) {
@@ -48,7 +55,7 @@ const ReportDetailsUser = () => {
 
             <div className="report-details-content">
                 <ReportNav role={auth?.role}/>
-                {/*  Summary  */}
+                {/* Report summary (read-only for users) */}
                 <ReportSummary editedReport={report} role={auth?.role} />
                 
                 <GeneralTab editedReport={report} role={auth?.role}/>

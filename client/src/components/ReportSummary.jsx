@@ -7,23 +7,28 @@ import {
 } from "../constants/reportOptions";
 import "../css/ReportSummary.css";
 
+// Displays and allows editing of key report details (status, priority, location, etc.)
 const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
+  
+  // determine if user has edit permissions
   const isAdminOrMaintenance = role === "admin" || role === "maintenance";
 
+  // update a specific field in the report
   const handleChange = (field, value) => {
     setEditedReport(prev => ({
       ...prev,
-      [field]: value
+      [field]: value  // update field value
     }));
   };
 
+  // get available locations based on selected campus
   const locations = CAMPUS_DATA[editedReport.campus] || [];
 
   return (
     <div className="report-summary">
       <h2>Report #{editedReport.id}</h2>
 
-      {/* Row 1 */}
+      {/* Row 1: status, priority, category  */}
       <div className="summary-row">
 
         <div>
@@ -32,7 +37,7 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
             <select
               value={editedReport.status || ""}
               onChange={(e) =>
-                handleChange("status", e.target.value)
+                handleChange("status", e.target.value)  // update status
               }
             >
               <option value="">Select Status</option>
@@ -53,7 +58,7 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
             <select
               value={editedReport.priority || ""}
               onChange={(e) =>
-                handleChange("priority", e.target.value)
+                handleChange("priority", e.target.value)  // update priority
               }
             >
               <option value="">Select Priority</option>
@@ -74,7 +79,7 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
             <select
               value={editedReport.category || ""}
               onChange={(e) =>
-                handleChange("category", e.target.value)
+                handleChange("category", e.target.value)  // update category
               }
             >
               <option value="">Select Category</option>
@@ -90,7 +95,7 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
         </div>
       </div>
 
-      {/* Row 2 */}
+      {/* Row 2: campus and location */}
       <div className="summary-row">
 
         <div>
@@ -99,8 +104,8 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
             <select
               value={editedReport.campus || ""}
               onChange={(e) => {
-                handleChange("campus", e.target.value);
-                handleChange("building", "");
+                handleChange("campus", e.target.value); // update campus
+                handleChange("building", "");           // reset building when campus changes
               }}
             >
               <option value="">Select Campus</option>
@@ -121,9 +126,9 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
             <select
               value={editedReport.building || ""}
               onChange={(e) =>
-                handleChange("building", e.target.value)
+                handleChange("building", e.target.value)  // update location
               }
-              disabled={!editedReport.campus}
+              disabled={!editedReport.campus}   // disabled until campus is selected
             >
               <option value="">Select Location</option>
               {locations.map(loc => (
@@ -138,6 +143,7 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
         </div>
       </div>
 
+      {/* Suggested deadline - visible to non-user roles */}
       {role !== "user" && (
         <div className="summary-row">
           <div>
@@ -147,17 +153,17 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
                 type="date"
                 value={
                   editedReport.suggestedDeadline
-                    ? editedReport.suggestedDeadline.split("T")[0]
+                    ? editedReport.suggestedDeadline.split("T")[0]  // format date for input
                     : ""
                 }
                 onChange={(e) =>
-                  handleChange("suggestedDeadline", e.target.value)
+                  handleChange("suggestedDeadline", e.target.value) // update deadline
                 }
               />
             ) : (
               <span>
                 {editedReport.suggestedDeadline
-                  ? new Date(editedReport.suggestedDeadline).toLocaleDateString()
+                  ? new Date(editedReport.suggestedDeadline).toLocaleDateString() // format display
                   : "N/A"}
               </span>
             )}

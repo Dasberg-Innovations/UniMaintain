@@ -10,11 +10,18 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 const USER_URL = "/api/users";
 
 const UserManagement = () => {
+
+  // access auth info for permissions
   const { auth } = useAuth();
+
+  // store user list and loading state
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // available system roles
   const roles = ["admin", "user", "maintenance"];
+
+  // roles specific to maintenance users
   const maintenanceRoles = [
     "Electrican",
     "Plumber",
@@ -23,6 +30,7 @@ const UserManagement = () => {
     "Groundsman",
   ];
 
+  // fetch users on initial load
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -32,7 +40,7 @@ const UserManagement = () => {
           }
         });
 
-        setUsers(response.data);
+        setUsers(response.data);  // store fetched users
       } catch (err) {
         console.error("Error fetching users:", err);
       } finally {
@@ -42,6 +50,7 @@ const UserManagement = () => {
     getUsers();
   }, []);
 
+  // update a specific field for a user
   const handleChange = (id, field, value) => {
     const updatedUsers = users.map((user) => {
       if (user._id === id) {
@@ -58,6 +67,7 @@ const UserManagement = () => {
     setUsers(updatedUsers);
   };
 
+  // delete user after confirmation
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
@@ -66,12 +76,13 @@ const UserManagement = () => {
           Authorization: `Bearer ${auth?.accessToken}`
         }
       });
-      setUsers(users.filter((user) => user._id !== id));
+      setUsers(users.filter((user) => user._id !== id));  // remove from UI
     } catch (err) {
       console.error("Error deleting user:", err);
     }
   };
 
+  // save all user changes to backend
   const handleSave = async () => {
     try {
       await axios.put(USER_URL, users, {
@@ -85,6 +96,7 @@ const UserManagement = () => {
     }
   };
 
+  // restrict access to admin only
   if (auth?.role !== "admin") return <p>Access denied</p>;
 
   return (

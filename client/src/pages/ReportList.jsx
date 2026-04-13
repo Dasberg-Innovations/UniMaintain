@@ -11,14 +11,17 @@ const REPORT_URL = "/api/reports"
 
 export default function ReportList() {
 
-const { auth } = useAuth();
+  // access user auth info
+  const { auth } = useAuth();
 
+  // store fetched reports
   const [reports, setReports] = useState([]);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const filter = queryParams.get("filter");
+  const filter = queryParams.get("filter"); // get filter from URL
 
+  // apply filtering based on query param
   let filteredReports = reports;
 
   if (filter === "active") {
@@ -43,10 +46,12 @@ const { auth } = useAuth();
     );
   }
 
+  // fetch reports on initial load
   useEffect(() => {
     getReports();
   }, []);
 
+  // retrieve reports from backend
   const getReports = async () => {
     try {
       const response = await axios.get(REPORT_URL, {
@@ -55,7 +60,7 @@ const { auth } = useAuth();
         }
       });
 
-      setReports(response.data);
+      setReports(response.data);  // update state with fetched reports
     } catch (err) {
       console.error("Error fetching reports:", err);
     }
@@ -68,6 +73,8 @@ const { auth } = useAuth();
 
       <div className="report-list">
         <h2>Reports</h2>
+
+        {/* Search bar (UI only for now) */}
         <div className="search-container">
           <div className="search-input-wrapper">
             <input 

@@ -52,6 +52,7 @@ const Register = () => {
         setErrMsg('');
     }, [email, pwd, matchPwd]);
 
+    // handle r3egister form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 

@@ -7,14 +7,19 @@ import img from "../assets/UniMaintainLogo.png";
 
 const LOGIN_URL = "/api/users/login";
 
+// Handles user login and authentication state
 const Login = () => {
+
+    // access auth setters and login state
     const { setAuth, isLoggedIn, setIsLoggedIn } = useAuth();
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // for redirect after login
 
+    // refs for input focus and error message
     const emailRef = useRef();
     const errRef = useRef();
 
+    // form state
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
@@ -29,6 +34,7 @@ const Login = () => {
         setErrMsg('');
     }, [email, pwd]);
 
+    // handle login form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -41,6 +47,7 @@ const Login = () => {
             const user = response?.data?.user;
             const accessToken = response?.data.accessToken;
             
+            // store user auth data in context
             setAuth({ 
                 email: user.email, 
                 name: user.name , 
@@ -48,6 +55,7 @@ const Login = () => {
                 accessToken
             });
             
+            // persist auth data in localStorage
             setIsLoggedIn(true);
             localStorage.setItem(
                 "auth",
@@ -62,9 +70,10 @@ const Login = () => {
             setEmail('');
             setPwd('');
 
-            navigate("/dashboard", { replace: true });
+            navigate("/dashboard", { replace: true });  // redirect after login
 
         } catch (err) {
+            // handle different error cases
             if (!err?.response) {
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 400) {
@@ -74,7 +83,7 @@ const Login = () => {
             } else {
                 setErrMsg('Login Failed');
             }
-            errRef.current.focus();
+            errRef.current.focus(); // move focus to error message
         }
     };
 
@@ -87,6 +96,7 @@ const Login = () => {
                     alt="UniMaintain Logo"
                     style={{ width: "190px", height: "auto", display: "block", margin: "0 auto 15px" }}
                 />
+                {/* Error message display */}
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
                     {errMsg}
                 </p>
@@ -99,7 +109,7 @@ const Login = () => {
                         id="email"
                         ref={emailRef}
                         autoComplete="off"
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}  // update email state
                         value={email}
                         required
                     />
@@ -109,7 +119,7 @@ const Login = () => {
                     <input
                         type="password"
                         id="password"
-                        onChange={(e) => setPwd(e.target.value)}
+                        onChange={(e) => setPwd(e.target.value)}    // update password state
                         value={pwd}
                         required
                     />

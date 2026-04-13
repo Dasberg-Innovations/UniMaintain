@@ -8,6 +8,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const CompletedBy = ({ users, editedReport, handleChange }) => {
 
+    // map users to label/value for the dropdown
     const completedOptions = users?.map(u => ({
         label: `${u.name} - ${u.maintenanceRole || "No Role"}`,
         value: u._id
@@ -15,18 +16,18 @@ const CompletedBy = ({ users, editedReport, handleChange }) => {
 
     return (
         <Autocomplete
-            multiple
-            options={completedOptions}
-            disableCloseOnSelect
-            getOptionLabel={(option) => option.label}
+            multiple                        // allow multiple selection
+        options={completedOptions}          // options to pick from
+            disableCloseOnSelect            // dropdown stays open while selecting
+            getOptionLabel={(option) => option.label}   // show name + role
             value={completedOptions.filter(opt =>
-                editedReport.completedBy?.includes(opt.value)
+                editedReport.completedBy?.includes(opt.value)   // pre-select assigned users
             )}
             onChange={(event, newValue) => {
-                const selectedIds = newValue.map(v => v.value);
-                handleChange("completedBy", selectedIds);
+                const selectedIds = newValue.map(v => v.value); // get selected IDs
+                handleChange("completedBy", selectedIds);       // update parent state
             }}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
+            isOptionEqualToValue={(option, value) => option.value === value.value}  // matching for MUI
             renderOption={(props, option, { selected }) => (
                 <li key={option.value} {...props}>
                 <Checkbox
@@ -42,7 +43,7 @@ const CompletedBy = ({ users, editedReport, handleChange }) => {
                 <TextField
                 {...params}
                 label="Completed By"
-                placeholder={editedReport.completedBy?.length ? "" : "Unassigned"}
+                placeholder={editedReport.completedBy?.length ? "" : "Unassigned"}  // placeholder if empty
                 />
             )}
         />
