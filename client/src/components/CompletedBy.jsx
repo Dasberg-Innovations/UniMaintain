@@ -17,7 +17,7 @@ const CompletedBy = ({ users, editedReport, handleChange }) => {
     return (
         <Autocomplete
             multiple                        // allow multiple selection
-        options={completedOptions}          // options to pick from
+            options={completedOptions}          // options to pick from
             disableCloseOnSelect            // dropdown stays open while selecting
             getOptionLabel={(option) => option.label}   // show name + role
             value={completedOptions.filter(opt =>
@@ -42,7 +42,6 @@ const CompletedBy = ({ users, editedReport, handleChange }) => {
             renderInput={(params) => (
                 <TextField
                 {...params}
-                label="Completed By"
                 placeholder={editedReport.completedBy?.length ? "" : "Unassigned"}  // placeholder if empty
                 />
             )}

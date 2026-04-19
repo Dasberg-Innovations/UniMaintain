@@ -4,13 +4,15 @@ const router = express.Router();
 const { 
     createReport,
     getReports,
-    updateReport
+    updateReport,
+    deleteReport
 } = require("../controllers/reportController");
 const verifyJWT = require("../middleware/verifyJWT");
 
 router.post("/", verifyJWT, createReport);
 router.get("/", verifyJWT, getReports);
 router.put("/:id", verifyJWT, updateReport);
+router.delete("/:id", verifyJWT, deleteReport);
 
 
 module.exports = router;

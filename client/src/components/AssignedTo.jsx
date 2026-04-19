@@ -42,7 +42,6 @@ const AssignedTo = ({ users, editedReport, handleChange }) => {
             renderInput={(params) => (
                 <TextField
                 {...params}
-                label="Assignment"
                 placeholder={editedReport.assignedTo?.length ? "" : "Assign..."}    // placeholder if empty
                 />
             )}

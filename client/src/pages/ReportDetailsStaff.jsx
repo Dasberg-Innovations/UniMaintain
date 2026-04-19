@@ -12,6 +12,9 @@ import "../css/reportDetails.css";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import CompletedBy from "../components/CompletedBy";
+
+const REPORT_URL = "/api/reports";
 
 const ReportDetailsStaff = () => {
     const { id } = useParams();     // get report ID from URL
@@ -54,7 +57,7 @@ const ReportDetailsStaff = () => {
     // save updated report to backend
     const handleSave = async () => {
         try {
-            await axios.put(`/api/reports/${report._id}`, editedReport, {
+            await axios.put(`${REPORT_URL}/${report._id}`, editedReport, {
                 headers: {
                     Authorization: `Bearer ${auth?.accessToken}`,
                 },
@@ -62,8 +65,22 @@ const ReportDetailsStaff = () => {
             alert("Report updated successfully!");
         } catch (err) {
             console.error("Error saving report:", err);
-            console.log("Saving to:", `/api/reports/${report._id}`);
-            console.log("Edited report:", editedReport);
+        }
+    };
+
+    // delete report after confirmation
+    const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this report?")) return;
+        try {
+            await axios.delete(`${REPORT_URL}/${report._id}`, {
+                headers: {
+                    Authorization: `Bearer ${auth?.accessToken}`,
+                },
+            });
+            alert("Report deleted successfully!");
+            navigate("/reportlist", { replace: true });
+        } catch (err) {
+            console.error("Error deleting report:", err);
         }
     };
 
@@ -80,7 +97,11 @@ const ReportDetailsStaff = () => {
     // sync edited report when report data changes
     useEffect(() => {
         if (report) {
-            setEditedReport(report);
+            setEditedReport({
+                ...report,
+                assignedTo: report.assignedTo?.map(u =>typeof u === "object" ? u._id : u ) || [],
+                completedBy: report.completedBy?.map(u =>typeof u === "object" ? u._id : u ) || []
+            });
         }
     }, [report]);
         
@@ -138,7 +159,7 @@ const ReportDetailsStaff = () => {
             <Sidebar role={auth?.role} activePage="reportstaff"/>
 
             <div className="report-details-content">
-                <ReportNav role={auth?.role} onBack={handleBack} onSave={handleSave}/>
+                <ReportNav role={auth?.role} onBack={handleBack} onSave={handleSave} onDelete={handleDelete}/>
                 <ReportSummary editedReport={editedReport} setEditedReport={setEditedReport} role={auth?.role} />
 
                 <Box>
