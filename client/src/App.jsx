@@ -11,6 +11,8 @@ import ReportList from "./pages/ReportList";
 import ReportDetailsUser from "./pages/ReportDetailsUser";
 import ReportDetailsStaff from "./pages/ReportDetailsStaff";
 import UserManagement from "./pages/UserManagement";
+import OutstandingReports from "./pages/OutstandingReports";
+import ReportSignoff from './pages/ReportSignoff';
 
 function App() {
   const { auth } = useAuth() || {};
@@ -35,6 +37,8 @@ function App() {
         </Route>
         <Route element={<RequireAuth allowedRoles={["admin", "maintenance"]} />}>
           <Route path="/reportstaff/:id" element={<ReportDetailsStaff />} />
+          <Route path="outstandingreports" element={<OutstandingReports />} />
+          <Route path="reportsignoff" element={<ReportSignoff />} />
         </Route>
         <Route element={<RequireAuth allowedRoles={["admin"]} />}>
           <Route path="/users" element={<UserManagement />} />

@@ -1,0 +1,105 @@
+/* GENERAL TAB */
+
+.general-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.general-tab .card-box {
+    background: #ffffff;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.general-tab .card-box textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 4px 0;
+    font-size: 15px;
+    line-height: 1.4;
+    resize: vertical;
+    color: #000;
+}
+
+.general-tab .card-box textarea:focus {
+    background: #fafafa;
+    border-radius: 4px;
+}
+
+.general-tab .two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.general-tab .left-column,
+.general-tab .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* COMPLETION TAB */
+
+.completion-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.completion-tab .card-box {
+    background: #f9fafb;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.completion-tab .two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.completion-tab .left-column,
+.completion-tab .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+
+/* SHARED INPUT STYLES */
+
+label {
+    font-size: 13px;
+    margin: 0;
+    padding-bottom: 2px;
+}
+
+input,
+select {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 15px;
+    line-height: 1.3;
+    box-sizing: border-box;
+    height: 34px;
+}
+
+textarea {
+    min-height: 70px;
+    resize: vertical;
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CompletedBy from "./CompletedBy";
+import '../css/GeneralTab&Completion.css'
 
 const CompletionTab = ({ editedReport, setEditedReport, role, users }) => {
     // only admins or maintenance can see this tab

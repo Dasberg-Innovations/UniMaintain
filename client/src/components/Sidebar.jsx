@@ -29,15 +29,15 @@ const Sidebar = ({ role, activePage }) => {
         </Link>
 
         {role === "maintenance" && (
-          <>
-            <div className={`sidebar-menu ${activePage === 'outstanding' ? 'active' : ''}`}>
+ <>
+            <Link to="/outstandingreports" className={`sidebar-menu ${activePage === 'outstanding' ? 'active' : ''}`}>
               <FontAwesomeIcon icon={faList} className="nav-icon" />
               <span>Outstanding Reports</span>
-            </div>
-            <div className={`sidebar-menu ${activePage === 'signoff' ? 'active' : ''}`}>
+            </Link>
+            <Link to="/reportsignoff" className={`sidebar-menu ${activePage === 'outstanding' ? 'active' : ''}`}>
               <FontAwesomeIcon icon={faHighlighter} className="nav-icon" />
               <span>Report Signoff</span>
-            </div>
+            </Link>
           </>
         )}
 
