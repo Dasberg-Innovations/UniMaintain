@@ -7,6 +7,8 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const AssignedTo = ({ users, editedReport, handleChange }) => {
+
+    // map users to label/value for the dropdown
     const assignmentOptions = users?.map(u => ({
         label: `${u.name} - ${u.maintenanceRole || "No Role"}`,
         value: u._id
@@ -14,18 +16,18 @@ const AssignedTo = ({ users, editedReport, handleChange }) => {
 
     return (
         <Autocomplete
-            multiple
-            options={assignmentOptions}
-            disableCloseOnSelect
-            getOptionLabel={(option) => option.label}
+            multiple                        // allow multiple selection
+            options={assignmentOptions}     // options to pick from
+            disableCloseOnSelect            // dropdown stays open while selecting
+            getOptionLabel={(option) => option.label}   // show name + role
             value={assignmentOptions.filter(opt =>
-                editedReport.assignedTo?.includes(opt.value)
+                editedReport.assignedTo?.includes(opt.value)    // pre-select assigned users
             )}
             onChange={(event, newValue) => {
-                const selectedIds = newValue.map(v => v.value);
-                handleChange("assignedTo", selectedIds);
+                const selectedIds = newValue.map(v => v.value); // get selected IDs
+                handleChange("assignedTo", selectedIds);        // update parent state
             }}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
+            isOptionEqualToValue={(option, value) => option.value === value.value} // matching for MUI
             renderOption={(props, option, { selected }) => (
                 <li {...props}>
                 <Checkbox
@@ -41,7 +43,7 @@ const AssignedTo = ({ users, editedReport, handleChange }) => {
                 <TextField
                 {...params}
                 label="Assignment"
-                placeholder={editedReport.assignedTo?.length ? "" : "Assign..."}
+                placeholder={editedReport.assignedTo?.length ? "" : "Assign..."}    // placeholder if empty
                 />
             )}
         />

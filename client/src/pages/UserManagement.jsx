@@ -10,11 +10,26 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 const USER_URL = "/api/users";
 
 const UserManagement = () => {
+<<<<<<< HEAD
   const { auth } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const roles = ["admin", "user", "maintenance"];
+=======
+
+  // access auth info for permissions
+  const { auth } = useAuth();
+
+  // store user list and loading state
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // available system roles
+  const roles = ["admin", "user", "maintenance"];
+
+  // roles specific to maintenance users
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
   const maintenanceRoles = [
     "Electrican",
     "Plumber",
@@ -23,6 +38,10 @@ const UserManagement = () => {
     "Groundsman",
   ];
 
+<<<<<<< HEAD
+=======
+  // fetch users on initial load
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -32,7 +51,11 @@ const UserManagement = () => {
           }
         });
 
+<<<<<<< HEAD
         setUsers(response.data);
+=======
+        setUsers(response.data);  // store fetched users
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
       } catch (err) {
         console.error("Error fetching users:", err);
       } finally {
@@ -42,6 +65,10 @@ const UserManagement = () => {
     getUsers();
   }, []);
 
+<<<<<<< HEAD
+=======
+  // update a specific field for a user
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
   const handleChange = (id, field, value) => {
     const updatedUsers = users.map((user) => {
       if (user._id === id) {
@@ -58,6 +85,10 @@ const UserManagement = () => {
     setUsers(updatedUsers);
   };
 
+<<<<<<< HEAD
+=======
+  // delete user after confirmation
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
@@ -66,12 +97,20 @@ const UserManagement = () => {
           Authorization: `Bearer ${auth?.accessToken}`
         }
       });
+<<<<<<< HEAD
       setUsers(users.filter((user) => user._id !== id));
+=======
+      setUsers(users.filter((user) => user._id !== id));  // remove from UI
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
     } catch (err) {
       console.error("Error deleting user:", err);
     }
   };
 
+<<<<<<< HEAD
+=======
+  // save all user changes to backend
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
   const handleSave = async () => {
     try {
       await axios.put(USER_URL, users, {
@@ -85,6 +124,10 @@ const UserManagement = () => {
     }
   };
 
+<<<<<<< HEAD
+=======
+  // restrict access to admin only
+>>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
   if (auth?.role !== "admin") return <p>Access denied</p>;
 
   return (

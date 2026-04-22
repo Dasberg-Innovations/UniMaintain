@@ -5,15 +5,25 @@ import Sidebar from "../components/Sidebar";
 import useAuth from "../hooks/useAuth";
 import "../css/reportForm.css";
 import "../css/Dashboard.css";
+import {
+  STATUS_LIST,
+  CATEGORY_LIST,
+  PRIORITY_LIST,
+  CAMPUS_DATA
+} from "../constants/reportOptions";
 
 const REPORT_URL = "/api/reports";
 
+// form used to submit new maintenance reports
 const ReportForm = () => {
 
+    // auth for API requests + role access
     const { auth, logout } = useAuth();
 
+    // used to focus error messages
     const errRef = useRef();
 
+    // form state
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [phone, setPhone] = useState("");
@@ -22,48 +32,12 @@ const ReportForm = () => {
     const [category, setCategory] = useState("");
     const [priority, setPriority] = useState("");
 
+    // error message display
     const [errMsg, setErrMsg] = useState('');
+    // submission success state
     const [success, setSuccess] = useState(false);
 
-    const categoryList = [
-        "General Maintenance",
-        "Electrical",
-        "Plumbing",
-        "Grounds",
-        "IT",
-        "Safety"
-    ];
-
-    const priorityList = ["Low", "Medium", "High"];
-
-    const campusData = {
-        "Main Campus": [
-            "Administrative Building",
-            "Cafeteria",
-            "ESL Department",
-            "Estate Police",
-            "Ford Library",
-            "S P E Development",
-            "Kennedy Industrial Arts",
-            "La Realista",
-            "Ladies' Dormitory",
-            "Married Student Complex",
-            "Music Building",
-            "Reference Library",
-            "School of Business",
-            "School of Science & Technology",
-            "School of Social Sciences",
-            "School of Social Sciences Annex",
-            "School of Theology",
-            "Timothy Graves Dormitory",
-            "Vernan Andrews Amphitheatre"
-        ],
-        "South Campus": [
-            "Offices",
-            "Classroom Block"
-        ]
-    };
-
+    // submit report to backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrMsg('');
@@ -90,9 +64,9 @@ const ReportForm = () => {
 
             console.log(response?.data);
 
-            setSuccess(true);
+            setSuccess(true);   // show success screen
 
-            // reset form
+            // reset form after submission
             setTitle('');
             setDescription('');
             setPhone('');
@@ -103,6 +77,7 @@ const ReportForm = () => {
 
         } catch (err) {
 
+            // handle API errors
             if (!err?.response) {
                 setErrMsg("No Server Response");
             } else if (err.response?.status === 400) {
@@ -115,7 +90,7 @@ const ReportForm = () => {
                 console.log(err);
             }
 
-            errRef.current.focus();
+            errRef.current.focus(); // focus error message
         }
     };
 
@@ -125,6 +100,7 @@ const ReportForm = () => {
 
             <div className="report-content">
                 {success ? (
+                    // success screen after submission
                     <section className="report-success">
                         <h1>Report Submitted!</h1>
                         <p>Your maintenance request has been logged.</p>
@@ -138,6 +114,7 @@ const ReportForm = () => {
                 ) : (
 
                     <div className="report-form-box">
+                        {/* error message display */}
                         <p
                             ref={errRef}
                             className={errMsg ? "errmsg" : "offscreen"}
@@ -173,7 +150,7 @@ const ReportForm = () => {
                                 required
                             >
                                 <option value="">-- Select Campus --</option>
-                                {Object.keys(campusData).map((camp) => (
+                                {Object.keys(CAMPUS_DATA).map((camp) => (
                                     <option key={camp} value={camp}>
                                         {camp}
                                     </option>
@@ -191,7 +168,7 @@ const ReportForm = () => {
                             >
                                 <option value="">-- Select Building --</option>
                                 {campus &&
-                                    campusData[campus].map((bldg) => (
+                                    CAMPUS_DATA[campus].map((bldg) => (
                                         <option key={bldg} value={bldg}>
                                             {bldg}
                                         </option>
@@ -207,7 +184,7 @@ const ReportForm = () => {
                                 required
                             >
                                 <option value="">-- Select Category --</option>
-                                {categoryList.map((cat) => (
+                                {CATEGORY_LIST.map((cat) => (
                                     <option key={cat} value={cat}>
                                         {cat}
                                     </option>
@@ -223,7 +200,7 @@ const ReportForm = () => {
                                 required
                             >
                                 <option value="">-- Select Priority --</option>
-                                {priorityList.map((p) => (
+                                {PRIORITY_LIST.map((p) => (
                                     <option key={p} value={p}>
                                         {p}
                                     </option>

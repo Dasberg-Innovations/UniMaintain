@@ -2,21 +2,21 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// Register Controller
+// register Controller
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if user exists
+    // check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ message: "User already exists" });
     }
 
-    // Hash password
+    // hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // create new user doc
     const newUser = new User({
       name,
       email,
@@ -33,21 +33,24 @@ const registerUser = async (req, res) => {
   }
 };
 
-// Login Controller
+// login Controller
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // verify password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // generate JWT access token
     const accessToken = jwt.sign(
       {
         UserInfo: {
@@ -80,11 +83,14 @@ const loginUser = async (req, res) => {
 // GET all users (Admin only)
 const getUsers = async (req, res) => {
   try {
+    // restrict access to admin only
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied" });
     }
 
     const users = await User.find().select("-password");
+
+    
     res.json(users);
   } catch (err) {
     console.error(err);
@@ -127,12 +133,19 @@ const updateUsers = async (req, res) => {
 // DELETE user (Admin only)
 const deleteUser = async (req, res) => {
   try {
+    // restrict access to admin only
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied" });
     }
 
     const { id } = req.params;
     await User.findByIdAndDelete(id);
+
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.json({ message: "User deleted successfully" });
   } catch (err) {
