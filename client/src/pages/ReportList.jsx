@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { filterReports } from "../constants/reportFilters";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 import ReportCard from "../components/ReportCard";
@@ -22,29 +23,7 @@ export default function ReportList() {
   const filter = queryParams.get("filter"); // get filter from URL
 
   // apply filtering based on query param
-  let filteredReports = reports;
-
-  if (filter === "active") {
-    filteredReports = reports.filter(r =>
-      ["Submitted", "Assigned", "In Progress"].includes(r.status)
-    );
-  } else if (filter === "resolved") {
-    filteredReports = reports.filter(r =>
-      r.status === "Resolved"
-    );
-  } else if (filter === "closed") {
-    filteredReports = reports.filter(r =>
-      r.status === "Closed"
-    );
-  } else if (filter === "pending") {
-    filteredReports = reports.filter(r =>
-      r.status === "Submitted"
-    );
-  } else if (filter === "outstanding") {
-    filteredReports = reports.filter(r =>
-      ["Assigned", "In Progress"].includes(r.status)
-    );
-  }
+  const filteredReports = filterReports(reports, filter);
 
   // fetch reports on initial load
   useEffect(() => {
@@ -101,7 +80,7 @@ export default function ReportList() {
 
               {filteredReports.length > 0 ? (
                 filteredReports.map((report) => (
-                  <ReportCard key={report.id} report={report} />
+                  <ReportCard key={report._id} report={report} filter={filter} filteredReports={filteredReports} />
                 ))
               ) : (
                 <tr>

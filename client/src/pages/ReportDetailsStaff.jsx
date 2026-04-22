@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate, useSearchParams , Navigate } from "react-router-dom";
+import { filterReports } from "../constants/reportFilters";
 import Sidebar from "../components/Sidebar";
 import "../css/reportDetails.css";
 import axios from "../api/axios";
@@ -12,7 +13,6 @@ import "../css/reportDetails.css";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import CompletedBy from "../components/CompletedBy";
 
 const REPORT_URL = "/api/reports";
 
@@ -28,8 +28,8 @@ const ReportDetailsStaff = () => {
     }
 
     // report state (use passed state first, fallback to fetch)
-    const [report, setReport] = useState(location.state?.report || null);
-    const [loading, setLoading] = useState(!report);
+    const [report, setReport] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     // user list for assignment
@@ -42,7 +42,7 @@ const ReportDetailsStaff = () => {
     );
   
     // editable version of report
-    const [editedReport, setEditedReport] = useState(report);
+    const [editedReport, setEditedReport] = useState(null);
     
     // tab state
     const [value, setValue] = useState(0);
@@ -84,9 +84,39 @@ const ReportDetailsStaff = () => {
         }
     };
 
+    // get filter value from URL query params
+    const [searchParams] = useSearchParams();
+    const filter = searchParams.get("filter");
+
     // navigate back to report list
     const handleBack = () => {
-        navigate("/reportlist", { replace: true });
+        navigate(`/reportlist?filter=${filter}`, { replace: true });
+    };
+
+    // get list of report IDs from navigation state (used for next/prev navigation)
+    const reportIds = location.state?.reportIds || [];
+    
+    // find current report position inside the list
+    const currentIndex = reportIds.indexOf(id);
+
+    // navigate to next report in the current filtered list
+    const handleNext = () => {
+        if (currentIndex < reportIds.length - 1) {
+            const nextId = reportIds[currentIndex + 1];
+            navigate(`/reportstaff/${nextId}?filter=${filter}`, {
+                state: { reportIds } // preserve navigation list
+            });
+        }
+    };
+
+    // navigate to previous report in the current filtered list
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            const prevId = reportIds[currentIndex - 1];
+            navigate(`/reportstaff/${prevId}?filter=${filter}`, {
+                state: { reportIds } // preserve navigation list
+            });
+        }
     };
 
     // redirect if not authenticated
@@ -107,27 +137,26 @@ const ReportDetailsStaff = () => {
         
     // fetch report if not passed via navigation state
     useEffect(() => {
-        if (!report) {
-            const getReport = async () => {
-                try {
-                    const res = await axios.get(`/api/reports/${id}`,{
-                        headers: {
-                            Authorization: `Bearer ${auth?.accessToken}`
-                        }
-                    });
-                    setReport(res.data);
-                } catch (err) {
-                    console.error(err);
-                    setError("Failed to load report.");
-                } finally {
-                    setLoading(false);
-                }
-            };
-            getReport();
-        } else {
-            setLoading(false);
-        }
-    }, [id, auth]);
+        const getReport = async () => {
+            try {
+                    if (location.state?.report) {
+                        setReport(location.state.report);
+                    }
+                    const res = await axios.get(`${REPORT_URL}/${id}`,{
+                    headers: {
+                        Authorization: `Bearer ${auth?.accessToken}`
+                    }
+                });
+                setReport(res.data);
+            } catch (err) {
+                console.error(err);
+                setError("Failed to load report.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        getReport();
+    }, [id, auth?.accessToken]);
 
     // fetch users for assignment dropdowns
     useEffect(() => {
@@ -150,7 +179,7 @@ const ReportDetailsStaff = () => {
         getUsers();
     }, [auth]);
 
-    if (loading) return <p>Loading report...</p>;
+    if (loading  || !editedReport) return <p>Loading report...</p>;
     if (error) return <p>{error}</p>;
     if (!report) return <p>No report found.</p>;
 
@@ -159,7 +188,16 @@ const ReportDetailsStaff = () => {
             <Sidebar role={auth?.role} activePage="reportstaff"/>
 
             <div className="report-details-content">
-                <ReportNav role={auth?.role} onBack={handleBack} onSave={handleSave} onDelete={handleDelete}/>
+                <ReportNav 
+                    role={auth?.role} 
+                    onBack={handleBack} 
+                    onSave={handleSave} 
+                    onDelete={handleDelete}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                    currentIndex={currentIndex}
+                    reportIds={reportIds}
+                />
                 <ReportSummary editedReport={editedReport} setEditedReport={setEditedReport} role={auth?.role} />
 
                 <Box>
