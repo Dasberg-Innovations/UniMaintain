@@ -35,7 +35,18 @@ const getReports = async (req, res) => {
 
     if (req.user.role === "admin"){
       // Allows admin to see all reports
-      reports = await Report.find().populate("createdBy", "name email");
+      reports = await Report.find()
+      .populate("createdBy", "name email")
+      .populate("assignedTo", "name")
+      .populate("completedBy", "name");
+    } else if (req.user.role === "maintenance") {
+      // Allows maintenance to see only assigned reports
+      reports = await Report.find({
+        assignedTo: req.user.id
+      })
+        .populate("createdBy", "name email")
+        .populate("assignedTo", "name")
+        .populate("completedBy", "name");
     } else {
       // Allows regular users to see their submitted reports
       reports = await Report.find({createdBy: req.user.id}).populate("createdBy", "name email");
@@ -47,4 +58,80 @@ const getReports = async (req, res) => {
   }
 };
 
-module.exports = { createReport , getReports};
+const updateReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedReport = await Report.findByIdAndUpdate(
+      id,
+      {
+        // General tab
+        description: req.body.description,
+        workInstructions: req.body.workInstructions,
+        assignment: req.body.assignment,
+        estimatedHours: req.body.estimatedHours,
+
+        // Completion tab
+        completionNotes: req.body.completionNotes,
+        rootCause: req.body.rootCause,
+        solution: req.body.solution,
+        completedBy: req.body.completedBy,
+        completionHours: req.body.completionHours,
+        dateCompleted: req.body.dateCompleted,
+
+        // Optional updates
+        status: req.body.status,
+        assignedTo: req.body.assignedTo
+      },
+      { returnDocument: "after" }
+    ).populate("createdBy assignedTo completedBy");
+
+    if (!updatedReport) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    res.json(updatedReport);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error updating report" });
+  }
+};
+
+const markAsSeen = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const report = await Report.findById(id);
+
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    // Initialize seenBy if missing
+    if (!report.seenBy) {
+      report.seenBy = [];
+    }
+
+    // Only add user if not already seen
+    if (!report.seenBy.some(u => u.toString() === userId.toString())) {
+      report.seenBy.push(userId);
+      await report.save();
+      console.log(`Report ${id} marked as seen by user ${userId}`);
+    } else {
+      console.log(`User ${userId} had already seen report ${id}`);
+    }
+
+    res.json({ message: "Marked as seen", report });
+  } catch (err) {
+    console.error("Error in markAsSeen:", err);
+    res.status(500).json({ message: "Error updating seen status" });
+  }
+};
+
+
+module.exports = { createReport , getReports, updateReport, markAsSeen };

@@ -1,0 +1,35 @@
+/* ReportSummary.css */
+.report-summary {
+  padding: 16px;
+}
+
+.report-summary h2 {
+  margin-bottom: 16px;
+}
+
+.summary-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.summary-row > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 200px
+}
+
+.summary-row label {
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.summary-row select,
+.summary-row input,
+.summary-row span {
+  padding: 4px 6px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

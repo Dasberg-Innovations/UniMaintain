@@ -1,5 +1,6 @@
-.report-details-page{
+.report-details-user-page{
     width: 100vw;
+    height: 100vh;
     background-color: #ffffff;
     color: black;
     font-family: sans-serif;
@@ -15,45 +16,21 @@
     display: flex; /* Subject to Change */
     flex-direction: column; /* Subject to Change */
     gap: 30px; /* Subject to Change */
-    max-width: 900px; /* Subject to Change */
-    margin-left: 250px; /* Subject to Change */
 }
 
-.report-title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
+.two-column {
+    display: flex;
+    gap: 20px;
 }
 
-.report-info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px 20px;
-    font-size: 1rem;
+.left-column, .right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.info-left {
-    text-align: left;
-    font-weight: 500;
-}
-
-.info-right {
-    text-align: right;
-    font-weight: 500;
-}
-
-.report-description {
-    border-top: 1px solid #ccc;
-    padding-top: 15px;
-}
-
-.report-description h2 {
-    margin-bottom: 10px;
-    font-size: 1.25rem;
-}
-
-.report-description p {
-    white-space: pre-line;
-    font-size: 1rem;
-    line-height: 1.5;
+textarea, input, select {
+    width: 100%;
+    padding: 8px;
 }

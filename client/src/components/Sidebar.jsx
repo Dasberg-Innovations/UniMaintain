@@ -49,10 +49,10 @@ const Sidebar = ({ role, activePage }) => {
 
         {role === "admin" && (
           <>
-            <div className={`sidebar-menu ${activePage === 'signoff' ? 'active' : ''}`}>
+            <Link to="/users" className={`sidebar-menu ${activePage === 'users' ? 'active' : ''}`}>
               <FontAwesomeIcon icon={faHighlighter} className="nav-icon" />
               <span>User Management</span>
-            </div>
+            </Link>
           </>
         )}
 

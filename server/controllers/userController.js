@@ -64,6 +64,7 @@ const loginUser = async (req, res) => {
       message: "Login successful",
       accessToken,
       user: {
+        id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -76,7 +77,74 @@ const loginUser = async (req, res) => {
   }
 };
 
+// GET all users (Admin only)
+const getUsers = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const users = await User.find().select("-password");
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching users" });
+  }
+};
+
+// UPDATE users (Admin only)
+const updateUsers = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const usersToUpdate = req.body;
+
+    const updatePromises = usersToUpdate.map((user) =>
+      User.findByIdAndUpdate(
+        user._id,
+        {
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          maintenanceRole:
+            user.role === "maintenance" ? user.maintenanceRole : null,
+        },
+        { returnDocument: "after" }
+      )
+    );
+
+    const updatedUsers = await Promise.all(updatePromises);
+    res.json({ message: "Users updated successfully", updatedUsers });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error updating users" });
+  }
+};
+
+// DELETE user (Admin only)
+const deleteUser = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+
+    res.json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error deleting user" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  getUsers,
+  updateUsers,
+  deleteUser,
 };
