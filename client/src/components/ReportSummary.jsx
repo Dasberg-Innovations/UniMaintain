@@ -26,7 +26,7 @@ const ReportSummary = ({ editedReport, setEditedReport, role = "user" }) => {
 
   return (
     <div className="report-summary">
-      <h2>Report #{editedReport.id}</h2>
+      <h2>Report: {editedReport.title}</h2>
 
       {/* Row 1: status, priority, category  */}
       <div className="summary-row">

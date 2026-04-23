@@ -10,7 +10,9 @@ const ReportNav = ({
   onPrint,
   onNext,
   onPrev,
-  onDelete
+  onDelete,
+  currentIndex,
+  reportIds
 }) => {
 
   const navigate = useNavigate(); // for navigation fallback
@@ -39,8 +41,8 @@ const ReportNav = ({
       {/* RIGHT SIDE */}
       <div className="nav-right">
         <button onClick={onPrint}>Print</button>
-        <button onClick={onPrev}>←</button>
-        <button onClick={onNext}>→</button>
+        <button onClick={onPrev} disabled={currentIndex <= 0}>←</button>
+        <button onClick={onNext } disabled={currentIndex >= reportIds.length - 1}>→</button>
 
         {/* Save option for admin and maintenance */}
         {(isAdmin || isMaintenance) && (

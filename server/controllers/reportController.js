@@ -59,6 +59,47 @@ const getReports = async (req, res) => {
   }
 };
 
+const getReportById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let report;
+
+    if (req.user.role === "admin") {
+      // Allows admin to access any report by ID
+      report = await Report.findById(id)
+        .populate("createdBy", "name email")
+        .populate("assignedTo", "name")
+        .populate("completedBy", "name");
+
+    } else if (req.user.role === "maintenance") {
+      // Allows maintenance to access only reports assigned to them
+      report = await Report.findOne({
+        _id: id,
+        assignedTo: req.user.id
+      })
+        .populate("createdBy", "name email")
+        .populate("assignedTo", "name")
+        .populate("completedBy", "name");
+
+    } else {
+      // Allows regular users to access only their own submitted reports
+      report = await Report.findOne({
+        _id: id,
+        createdBy: req.user.id
+      }).populate("createdBy", "name email");
+    }
+
+    // If no report is found or user is not authorized
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    res.json(report);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching report" });
+  }
+};
+
 // update report
 const updateReport = async (req, res) => {
   try {
@@ -165,7 +206,8 @@ const deleteReport = async (req, res) => {
 
 module.exports = { 
   createReport , 
-  getReports, 
+  getReports,
+  getReportById,
   updateReport,
   deleteReport
 };

@@ -72,8 +72,9 @@
   font-family: inherit;
   resize: vertical;
   box-sizing: border-box;
+  background-color: #ffffff;  
+  color: #000;               
 }
-
 /* Submit button */
 .report-form-box button {
   width: 100%;

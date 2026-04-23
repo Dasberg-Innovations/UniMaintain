@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";
 
 // Single report row in a table
 // Clickable to navigate to the report details
-export default function ReportCard({ report }) {
+export default function ReportCard({ report, filter, filteredReports }) {
   
   // for navigating to report details
   const navigate = useNavigate();
@@ -14,9 +14,19 @@ export default function ReportCard({ report }) {
   // handle row click based on user role
   const handleClick = () => {
     if (auth?.role === "admin" || auth?.role === "maintenance") {
-      navigate(`/reportstaff/${report._id}`, { state: { report } });  // admin/maintenance view
+      // admin/maintenance view
+      navigate(`/reportstaff/${report._id}?filter=${filter}`, {
+        state: { 
+          report,
+          reportIds: filteredReports.map(r => r._id)
+        } });  
     } else {
-      navigate(`/reportuser/${report._id}`, { state: { report } });   // regular user view
+      // regular user view
+      navigate(`/reportuser/${report._id}?filter=${filter}`, {
+        state: { 
+          report,
+          reportIds: filteredReports.map(r => r._id)
+        }});   
     }
   };
 
