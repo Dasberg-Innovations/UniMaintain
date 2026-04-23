@@ -56,7 +56,7 @@ export default function ReportList() {
   }, [token]);
 
   // apply filtering based on query param
-  const filteredReports = filterReports(reports, filter);
+  let filteredReports = filterReports(reports, filter);
 
   // Apply search filter
   if (searchTerm.trim()) {

@@ -209,5 +209,6 @@ module.exports = {
   getReports,
   getReportById,
   updateReport,
-  deleteReport
+  deleteReport,
+  markAsSeen
 };

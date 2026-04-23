@@ -17,19 +17,6 @@ const GeneralTab = ({ editedReport, setEditedReport, role, users }) => {
 
     return (
         <div className="general-tab">
-<<<<<<< HEAD
-            {/* Reported By - always shows for admins/maintenance, optional for users */}
-            {isAdminOrMaintenance && <ReportedBy report={editedReport} />}
-
-            {/* Description - always visible */}
-            <div className="details-section">
-                <label>Details</label>
-                <textarea 
-                    value={editedReport.description || ""}
-                    readOnly={!isAdminOrMaintenance}
-                    onChange={(e) =>
-                        handleChange("description", e.target.value)
-=======
 
             {/* Reported By - always shows for admins/maintenance*/}
             {isAdminOrMaintenance && (
@@ -46,40 +33,12 @@ const GeneralTab = ({ editedReport, setEditedReport, role, users }) => {
                     readOnly={!isAdminOrMaintenance}        // only editable for admins/maintenance
                     onChange={(e) =>
                         handleChange("description", e.target.value) // update description
->>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
                     }
                 />
             </div>
 
             {/* Work Instructions / Assignment / Estimated Hours - admins/maintenance only */}
             {isAdminOrMaintenance && (
-<<<<<<< HEAD
-                <div className="two-column">
-
-                    <div className="left-column">
-                        <label>Work Instructions</label>
-                        <textarea 
-                            value={editedReport.workInstructions || ""}
-                            onChange={(e) =>
-                                handleChange("workInstructions", e.target.value)
-                            }
-                        />
-                    </div>
-
-                    <div className="right-column">
-                        <label>Assignment</label>
-                        <AssignedTo users={users} editedReport={editedReport} handleChange={handleChange} />
-
-                        <label>Estimated Hours</label>
-                        <input 
-                            type="number" 
-                            value={editedReport.estimatedHours || ""} 
-                            onChange={(e) =>
-                                handleChange("estimatedHours", e.target.value)
-                            }
-                        />
-                    </div>
-=======
                 <div className="card-box two-column">
 
                     <div className="left-column box-inner">
@@ -114,7 +73,6 @@ const GeneralTab = ({ editedReport, setEditedReport, role, users }) => {
 
                     </div>
 
->>>>>>> b69b25abe6b24471a37c01784ae73806e7ff1ee2
                 </div>
             )}
         </div>
