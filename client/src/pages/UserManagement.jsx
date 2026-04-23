@@ -106,7 +106,9 @@ const UserManagement = () => {
       <div className="main-content">
         <div className="page-header">
           <h2>User Management</h2>
-          <button onClick={handleSave}>Save</button>
+          <button className="save-btn" onClick={handleSave}>
+            Save
+          </button>
         </div>
 
         <SearchFilter />
@@ -188,7 +190,12 @@ const UserManagement = () => {
                     </td>
 
                     <td>
-                      <button onClick={() => handleDelete(user._id)}> <FontAwesomeIcon icon={faTrash} /></button>
+                      <button 
+                        className="delete-btn"
+                        onClick={() => handleDelete(user._id)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
                     </td>
                   </tr>
                 ))}

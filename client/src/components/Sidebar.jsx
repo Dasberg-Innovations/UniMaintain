@@ -56,16 +56,6 @@ const Sidebar = ({ role, activePage }) => {
           </>
         )}
 
-        <Link to="/notifications" className={`sidebar-menu ${activePage === 'settings' ? 'active' : ''}`}>
-          <FontAwesomeIcon icon={faBell} className="nav-icon" />
-          <span>Notifications</span>
-        </Link>
-
-        <Link to="/settings" className={`sidebar-menu ${activePage === 'settings' ? 'active' : ''}`}>
-          <FontAwesomeIcon icon={faGears} className="nav-icon" />
-          <span>Settings</span>
-        </Link>
-
         <LogoutButton />
       </nav>
     </aside>

@@ -26,10 +26,19 @@
 }
 
 .summary-row select,
-.summary-row input,
+.summary-row input {
+  padding: 4px 6px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff;   
+  color: #000;                 
+}
+
 .summary-row span {
   padding: 4px 6px;
   font-size: 0.9rem;
+  background-color: #ffffff;  
   border: 1px solid #ccc;
   border-radius: 4px;
 }

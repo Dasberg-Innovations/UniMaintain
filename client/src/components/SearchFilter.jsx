@@ -2,12 +2,15 @@ import React from "react";
 import "../css/SearchFilter.css";
 
 const SearchFilter = () => {
-  return (
+return (
     <div className="search-filter-container">
-      <input
-        type="text"
-        placeholder="Search by name or email..."
-      />
+      
+      <div className="search-input-wrapper">
+        <input
+          type="text"
+          placeholder="Search by name or email..."
+        />
+      </div>
 
       <select>
         <option value="">Filter by Role</option>
@@ -22,6 +25,7 @@ const SearchFilter = () => {
         <option value="Plumbing">Plumbing</option>
         <option value="General">General</option>
       </select>
+
     </div>
   );
 };
