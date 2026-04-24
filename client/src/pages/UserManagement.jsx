@@ -25,7 +25,7 @@ const UserManagement = () => {
   const maintenanceRoles = [
     "Electrican",
     "Plumber",
-    "General Tecnhician",
+    "General Technician",
     "IT Technician",
     "Groundsman",
   ];
