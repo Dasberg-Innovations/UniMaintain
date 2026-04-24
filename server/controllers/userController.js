@@ -67,6 +67,7 @@ const loginUser = async (req, res) => {
       message: "Login successful",
       accessToken,
       user: {
+        id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -87,8 +88,8 @@ const getUsers = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    // fetch users without password field
     const users = await User.find().select("-password");
+
     
     res.json(users);
   } catch (err) {
@@ -138,6 +139,7 @@ const deleteUser = async (req, res) => {
     }
 
     const { id } = req.params;
+    await User.findByIdAndDelete(id);
 
     const deletedUser = await User.findByIdAndDelete(id);
 

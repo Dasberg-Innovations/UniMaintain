@@ -52,6 +52,7 @@ const Login = () => {
                 email: user.email, 
                 name: user.name , 
                 role: user.role, 
+                userId: user.id,
                 accessToken
             });
             
@@ -63,6 +64,7 @@ const Login = () => {
                     email: user.email,
                     name: user.name,
                     role: user.role,
+                    userId: user.id,
                     accessToken
                 })
             );

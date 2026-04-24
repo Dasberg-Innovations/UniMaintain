@@ -96,6 +96,13 @@ const reportSchema = new mongoose.Schema({
     default: null 
   },
 
+  seenBy: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: []
+  }],
+  
+
   reportedAt: {
     type: Date,
     default: Date.now

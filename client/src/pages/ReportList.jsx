@@ -17,14 +17,57 @@ export default function ReportList() {
 
   // store fetched reports
   const [reports, setReports] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const filter = queryParams.get("filter"); // get filter from URL
 
-  // apply filtering based on query param
-  const filteredReports = filterReports(reports, filter);
+  const userId = auth?.user?.id;
+  const token = auth?.accessToken;
 
+  // Update seenBy locally
+  const handleSeenUpdate = (id) => {
+    const userId = auth?.user?.id;
+    setReports((prev) =>
+      prev.map((r) => {
+        if (r._id !== id) return r;
+        // Only add if not already seen
+        if ((r.seenBy || []).some((s) => s.toString() === userId?.toString())) return r;
+        return { ...r, seenBy: [...(r.seenBy || []), userId] };
+      })
+    );
+  };
+  
+  // Fetch reports from backend
+  useEffect(() => {
+    const getReports = async () => {
+      try {
+        if (!token) return;
+        const response = await axios.get("/api/reports", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setReports(response.data || []);
+      } catch (err) {
+        console.error("Error fetching reports:", err);
+      }
+    };
+
+    getReports();
+  }, [token]);
+
+  // apply filtering based on query param
+  let filteredReports = filterReports(reports, filter);
+
+  // Apply search filter
+  if (searchTerm.trim()) {
+    const lowerSearch = searchTerm.toLowerCase();
+    filteredReports = filteredReports.filter(
+      (r) =>
+        r.title?.toLowerCase().includes(lowerSearch) ||
+        r.category?.toLowerCase().includes(lowerSearch) ||
+        r.status?.toLowerCase().includes(lowerSearch)
+    );
+  }
   // fetch reports on initial load
   useEffect(() => {
     getReports();
@@ -44,6 +87,7 @@ export default function ReportList() {
       console.error("Error fetching reports:", err);
     }
   };
+  
 
   return (
     <div className="report-list-container">
@@ -60,6 +104,8 @@ export default function ReportList() {
               type="text" 
               placeholder="Search reports by title, category, or status" 
               className="search-bar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -75,12 +121,16 @@ export default function ReportList() {
                 <th>Date</th>
               </tr>
             </thead>
-
             <tbody>
-
               {filteredReports.length > 0 ? (
                 filteredReports.map((report) => (
-                  <ReportCard key={report._id} report={report} filter={filter} filteredReports={filteredReports} />
+                  <ReportCard 
+                    key={report._id} 
+                    report={report} 
+                    filter={filter} 
+                    filteredReports={filteredReports} 
+                    onSeen={handleSeenUpdate}
+                  />
                 ))
               ) : (
                 <tr>
@@ -91,6 +141,6 @@ export default function ReportList() {
           </table>
         </div>
       </div>
-    </div> 
+    </div>
   );
 }

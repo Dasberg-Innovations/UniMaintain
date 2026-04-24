@@ -136,6 +136,7 @@ const ReportDetailsStaff = () => {
     }, [report]);
         
     // fetch report if not passed via navigation state
+
     useEffect(() => {
         const getReport = async () => {
             try {

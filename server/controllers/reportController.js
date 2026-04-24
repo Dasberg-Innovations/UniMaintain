@@ -108,12 +108,14 @@ const updateReport = async (req, res) => {
     const updatedReport = await Report.findByIdAndUpdate(
       id,
       {
+        // General tab
         // general tab
         description: req.body.description,
         workInstructions: req.body.workInstructions,
         assignment: req.body.assignment,
         estimatedHours: req.body.estimatedHours,
 
+        // Completion tab
         // completion tab
         completionNotes: req.body.completionNotes,
         rootCause: req.body.rootCause,
@@ -122,6 +124,7 @@ const updateReport = async (req, res) => {
         completionHours: req.body.completionHours,
         dateCompleted: req.body.dateCompleted,
 
+        // Optional updates
         // status + assignment updates
         status: req.body.status,
         assignedTo: req.body.assignedTo
@@ -140,6 +143,44 @@ const updateReport = async (req, res) => {
   }
 };
 
+const markAsSeen = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const report = await Report.findById(id);
+
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    // Initialize seenBy if missing
+    if (!report.seenBy) {
+      report.seenBy = [];
+    }
+
+    // Only add user if not already seen
+    if (!report.seenBy.some(u => u.toString() === userId.toString())) {
+      report.seenBy.push(userId);
+      await report.save();
+      console.log(`Report ${id} marked as seen by user ${userId}`);
+    } else {
+      console.log(`User ${userId} had already seen report ${id}`);
+    }
+
+    res.json({ message: "Marked as seen", report });
+  } catch (err) {
+    console.error("Error in markAsSeen:", err);
+    res.status(500).json({ message: "Error updating seen status" });
+  }
+};
+
+
+module.exports = { createReport , getReports, updateReport, markAsSeen };
 // DELETE report (Admin only)
 const deleteReport = async (req, res) => {
   try {
@@ -168,5 +209,6 @@ module.exports = {
   getReports,
   getReportById,
   updateReport,
-  deleteReport
+  deleteReport,
+  markAsSeen
 };
